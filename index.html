@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html debug="true">
+    <head>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/mobile-detect/1.3.2/mobile-detect.min.js"></script>
+        <!--<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>-->
+        <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
+        <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
+        <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
+        <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png">
+        <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png">
+        <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png">
+        <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png">
+        <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png">
+        <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+        <link rel="icon" type="image/png" href="/favicon-194x194.png" sizes="194x194"> 
+        <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+        <link rel="icon" type="image/png" href="/android-chrome-192x192.png" sizes="192x192">
+        <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
+        <link rel="manifest" href="/manifest.json">
+        <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#32cd32">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <meta name="theme-color" content="#32cd32">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta charset="UTF-8">
+        <title>Finite Campus</title>
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                text-align: center;
+            }
+            #wrapper {
+                min-height: 100%;
+                position: relative;
+            }
+            #header {
+                background: limegreen;
+                color: white;
+                padding: 10px;
+            }
+            #content {
+                padding-bottom: 125px;
+            }
+            #footer {
+                color: white;
+                background: gray;
+                width: 100%;
+                height: 100px;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+            }
+            a {
+                color: white;
+            }
+            a:link {
+                text-decoration: none;
+            }
+            a:visited {
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
+            }
+        </style>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+        <script>
+            function loginSubmit() {
+                $.post(".database/" + $("#loginUser").val() + "/password", function(data, status){
+                    if (data == btoa($("#loginPass").val())) {
+                        localStorage.setItem("username", btoa($("#loginUser").val()));
+                        alert("Login successful.");
+                    } else {
+                        alert("Invalid login.");
+                    }
+                })
+            }
+        </script>
+    </head>
+    <body>
+        <div id='wrapper'>
+            <div id="header">
+                <h1>Finite Campus</h1>
+                <a id="logout" href="#">Logout</a>
+            </div>
+            <div id="sidebar"></div>
+            <div id="content">
+                <form id="login">
+                    <p>Username: <input type="text" id="loginUser"></p>
+                    <p>Password: <input type="password" id="loginPass"></p>
+                    <button onclick="loginSubmit()">Login</button>
+                </form>
+            </div>
+            <div id="footer">
+                <p>Copyright 2016 Brian Vo</p>
+            </div>
+        </div>
+        <script type="text/javascript">
+            if (localStorage.username) {
+                $("#login").hide();
+                var username = atob(localStorage.getItem("username"));
+                $("#logout").show();
+            }
+            var md = new MobileDetect(window.navigator.userAgent);
+            if (md.mobile() != null) {
+               if (!window.matchMedia('(display-mode: standalone)').matches) {
+                   $("#content").append("<p>Please install the web app. Instructions for your phone:</p>");
+                   switch (md.userAgent()) {
+                        case "Safari":
+                            $("#content").append("<p>Press the middle-bottom button, the one that looks like an arrow coming from a box. Then, press \"Add to Home Screen\".</p>")
+                            break;
+                        case "Chrome":
+                            $("#content").append("<p>Press the three dots in the upper right hand corner, then press \"Add to Home Screen\". Press add, and you're ready to go.</p>")
+                            break;
+                   }
+               } 
+            }
+            </script>
+    </body>
+</html>
